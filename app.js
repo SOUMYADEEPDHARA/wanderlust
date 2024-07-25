@@ -4,12 +4,16 @@ const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
 const path = require("path");
 const methodOverride = require("method-override");
+const ejsMate= require("ejs-mate");
 
 
 app.use(methodOverride('_method'));
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.engine('ejs',ejsMate );
+app.use(express.static(path.join(__dirname,"/public")));
+
 
 //const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -29,9 +33,9 @@ async function main() {
  app.set("views", path.join(__dirname, "views"));
 
   
-/*app.get("/",(req,res)=>{
+app.get("/",(req,res)=>{
     res.send("hi i am rout");
-});*/
+});
 
 
 //Index Route

@@ -1,0 +1,56 @@
+/*navbar*/
+.navbar{
+   height: 5rem; 
+   background-color: white;
+}
+.fa-compass{
+    color: #fe424d;
+    font-size:2rem;
+}
+
+.nav-link{
+    color: #222222 !important;
+    
+}
+
+
+/*footer*/
+.fa-info-links a {
+    text-decoration: none;
+}
+.fa-info-links a:hover {
+    text-decoration: underline;
+}
+
+.fa-info-brand {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.fa-info-links {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.fa-info-socials {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.fa-info-socials i {
+    margin-right: 1rem;
+    font-size: 1.2rem;
+}
+
+.fa-info {
+    text-align: center;
+    height: 8rem;
+    background-color: #fbf7f7;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center; 
+    justify-content: center;
+}
