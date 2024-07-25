@@ -5,9 +5,9 @@ const Listing = require("../models/listing.js");
 const MONGO_URL = 'mongodb://localhost:27017/wanderlust';
 
 main()
-  .then(async() => {
+  .then(() => {
     console.log("connected to DB");
-    await initDB();
+   // await initDB();
   })
   .catch((err) => {
     console.log(err);
