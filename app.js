@@ -13,18 +13,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
-mongoose.connect('mongodb://localhost:27017/wanderlust')
-  .then(() => {
+//mongoose.connect('mongodb://127.0.0.1:27017/wanderlust')
+  main().then(() => {
     console.log('Connected to MongoDB');
   })
   .catch(err => {
     console.error('Failed to connect to MongoDB', err);
   });
 
-/*async function main() {
-    await mongoose.connect(MONGO_URL);
-  }*/
-
+async function main() {
+    await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust');
+  
+}
  app.set("view engine", "ejs");
  app.set("views", path.join(__dirname, "views"));
 
