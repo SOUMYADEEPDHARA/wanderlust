@@ -94,3 +94,23 @@
     opacity: 0.2;
     background-color:rgb(237, 112, 112);
 }
+
+/*show*/
+.card.custom-card {
+    border: none; /* Removes the card border */
+    box-shadow: none; /* Removes the shadow if you want a cleaner look */
+  }
+  .btn {
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+  }
+  .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+  }
+  .modal-lg {
+    max-width: 90%;
+  }

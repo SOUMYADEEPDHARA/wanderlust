@@ -1,18 +1,46 @@
-<% layout('layouts/boilerplate') -%>
-  <body>
-    <h3>Listing Details :</h3>
-    <ul>
-      <li><%= listing.title %></li>
-      <li><%= listing.description %></li>
-      <li>&#8377; <%= listing.price.toLocaleString("en-IN") %></li>
-      <li><%= listing.location %></li>
-      <li><%= listing.country %></li>
-    </ul>
-    <br />
-    <a href="/listings/<%= listing._id %>/edit">Edit this Listing</a>
-    <br /><br />
-    <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
-      <button>Delete this listing</button>
-    </form>
-  </body>
-  
+<% layout("/layouts/boilerplate") %>
+
+<body>
+  <main class="d-flex flex-column justify-content-center min-vh-100">
+    <h3 class="my-4">Listing Details</h3>
+    <div class="card mb-4 custom-card col-12 col-md-8">
+      <img src="<%= listing.image.url %>" class="card-img-top img-fluid" alt="listing_image" style="height: 400px; object-fit: cover; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#imageModal" />
+      <div class="card-body">
+        <h5 class="card-title mb-2"><%= listing.title %></h5>
+        <p class="card-text mb-2"><%= listing.description %></p>
+        <p class="card-text mb-2">
+          <% if (listing.price != null) { %>
+            &#8377;<%= listing.price.toLocaleString("en-IN") %>
+          <% } else { %>
+            Price not available
+          <% } %>
+        </p>
+        <p class="card-text mb-2"><%= listing.location %></p>
+        <p class="card-text mb-4"><%= listing.country %></p>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline">
+        <button class="btn btn-danger">Delete</button>
+      </form>
+      <a href="/listings/<%= listing._id %>/edit" class="btn btn-primary">Edit</a>
+    </div>
+  </main>
+
+  <!-- Modal for full-screen image -->
+  <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <img src="<%= listing.image.url %>" class="img-fluid" alt="listing_image" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
