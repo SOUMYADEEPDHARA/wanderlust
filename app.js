@@ -139,23 +139,22 @@ app.post("/listings/:id/reviews", validateReview, wrapAsync(async (req, res) => 
   await newReview.save();
   await listing.save();
   res.redirect(`/listings/${listing._id}`);
+}));
 
+  
 //delete review rout
 app.delete('/listings/:id/reviews/:reviewId', wrapAsync(async (req, res) => {
-  let { id, reviewId } = req.params;
-  
-  // Find the listing and remove the reference to the review
+  const { id, reviewId } = req.params;
+  const listing = await Listing.findById(id);
+  const review = await Review.findById(reviewId);
   await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-  
-  // Delete the actual review
   await Review.findByIdAndDelete(reviewId);
-  
-  // Redirect back to the listing page
   res.redirect(`/listings/${id}`);
 }));
 
 
-}));
+
+
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page not found!"));
 });
@@ -168,4 +167,4 @@ app.use((err, req, res, next) => {
 
 app.listen(8080, () => {
   console.log("server is listening to port 8080");
-})
+});
