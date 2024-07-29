@@ -11,7 +11,8 @@ const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema } = require("./schema.js");
 const Review = require("./models/review.js");
 const { reviewSchema } = require("./schema.js");
-
+const session = require("express-session");
+const flash = require("connect-flash");
 
 const listings= require("./routes/listing.js");
 const reviews = require("./routes/review.js");
@@ -20,15 +21,12 @@ const reviews = require("./routes/review.js");
 app.use(methodOverride('_method'));
 const bodyParser = require('body-parser');
 const { render } = require("ejs");
+const { connect } = require("http2");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
-
-//const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
-
-//mongoose.connect('mongodb://127.0.0.1:27017/wanderlust')
 main().then(() => {
   console.log('Connected to MongoDB');
 })
@@ -44,20 +42,36 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 
+const sessionOptions={
+  secret: 'Mysecretcpde',
+  resave: false,
+  saveUninitialized: true,
+  cookie:{
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, //milisec*sec*min*hour*day[after 7 days expires]
+    maxAge:1000 * 60 * 60 * 24 * 7
+
+  }
+}
+
+
 app.get("/", (req, res) => {
   res.send("hi i am rout");
 });
 
 
 
+app.use(session(sessionOptions));
+app.use(flash());
 
-
+app.use((req,res,next) =>{
+  res.locals.success= req.flash("success");
+  res.locals.error= req.flash("error");
+  next();
+});
 
 app.use("/listings", listings);
-
 app.use("/listings/:id/reviews", reviews);
-
-
 
 
 app.all("*", (req, res, next) => {

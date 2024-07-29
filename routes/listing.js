@@ -12,6 +12,7 @@ const { listingSchema } = require("../schema.js");
 
 
 
+
 const validateListing = (req, res, next) => {
     let { error } = listingSchema.validate(req.body);
     //console.log(result);
@@ -42,8 +43,14 @@ router.get("/", wrapAsync(async (req, res) => {
   //Show Route
   router.get("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const listing = await Listing.findById(id).populate("reviews");
+   
+   const listing = await Listing.findById(id).populate("reviews");
+   if (!listing) {
+    req.flash("error","Listing does not exist!");
+    return res.redirect("/listings");
+   }
     res.render("listings/show.ejs", { listing });
+
   })
   );
   
@@ -53,8 +60,8 @@ router.post("/", validateListing, wrapAsync(async (req, res, next) => {
     const newListing = new Listing(req.body.listing);
   
     await newListing.save();
+    req.flash("success","New Listing Created!");
     res.redirect("/listings");
-  
   
   })
   );
@@ -63,6 +70,10 @@ router.post("/", validateListing, wrapAsync(async (req, res, next) => {
   router.get("/:id/edit", wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
+    if (!listing) {
+      req.flash("error","Listing does not exist!");
+      return res.redirect("/listings");
+     }
     res.render("listings/edit.ejs", { listing });
   })
   );
@@ -85,6 +96,7 @@ router.post("/", validateListing, wrapAsync(async (req, res, next) => {
     //console.log(`Updating listing with id: ${id}`);
     let listing = await Listing.findByIdAndUpdate(id, {...req.body.listing}, { new: true, runValidators: true });
     await listing.save();
+    req.flash("success","Listing Edited!");
     res.redirect(`/listings/${id}`);
 }));
 
@@ -94,6 +106,7 @@ router.post("/", validateListing, wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     // console.log(deletedListing);
+    req.flash("success","Listing deleted");
     res.redirect("/listings");
   })
   );
