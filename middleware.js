@@ -39,14 +39,14 @@ module.exports.isOwner=async(req,res,next)=>{
 };
 
 module.exports.validateListing = (req, res, next) => {
-  const { error } = listingSchema.validate(req.body);
-  if (error) {
-      const msg = error.details.map(el => el.message).join(",");
-      next(new ExpressError(msg, 400)); // Use 400 as status code for validation errors
-  } else {
-      next();
+    const { error } = listingSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(",");
+        throw new ExpressError(msg, 400); // Use 400 as status code for validation errors
+    } else {
+        next();
+    }
   }
-}
 
  module.exports.validateReview = (req, res, next) => {
     let { error } = reviewSchema.validate(req.body);
