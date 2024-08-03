@@ -13,12 +13,14 @@ const { isLoggedIn } = require("../middleware.js");
 const { isOwner } = require("../middleware.js")
 const { validateListing } = require("../middleware.js");
 const listingController = require("../controllers/listing.js");
+const multer  = require('multer');
+const {storage}= require("../cloudConfig.js");
+const upload = multer({storage });
 
 
-//Index Route
-router.route("/")
-.get(wrapAsync(listingController.index))
-.post(isLoggedIn, validateListing, wrapAsync(listingController.createListing));;
+ router.route("/")
+    .get(wrapAsync(listingController.index))
+    .post(isLoggedIn,upload.single("listing[image]"),  wrapAsync(listingController.createListing));
 
 
 //New Route

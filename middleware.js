@@ -39,16 +39,14 @@ module.exports.isOwner=async(req,res,next)=>{
 };
 
 module.exports.validateListing = (req, res, next) => {
-    let { error } = listingSchema.validate(req.body);
-    //console.log(result);
-    if (error) {
-      let errMsg = error.details.map((el) => el.message).join(",");
-      throw new ExpressError(400, errMsg);
-    }
-    else {
+  const { error } = listingSchema.validate(req.body);
+  if (error) {
+      const msg = error.details.map(el => el.message).join(",");
+      next(new ExpressError(msg, 400)); // Use 400 as status code for validation errors
+  } else {
       next();
-    }
-  };
+  }
+}
 
  module.exports.validateReview = (req, res, next) => {
     let { error } = reviewSchema.validate(req.body);
@@ -72,3 +70,4 @@ module.exports.validateListing = (req, res, next) => {
     next();
 
 };
+// Example of error handling in Express middleware

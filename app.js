@@ -1,3 +1,6 @@
+if(process.env.NODE_ENV != "production"){
+  require("dotenv").config();
+}
 
 const express = require("express");
 const app = express();
@@ -83,6 +86,7 @@ app.use((req,res,next) =>{
   res.locals.success= req.flash("success");
   res.locals.error= req.flash("error");
   res.locals.currentUser=req.user
+  
   next();
 });
 
@@ -101,13 +105,16 @@ app.use("/", usersRouter);
 
 
 app.all("*", (req, res, next) => {
-  next(new ExpressError(404, "Page not found!"));
+  // After
+res.writeHead(404, { 'Content-Type': 'text/plain' }); // Correct
+res.end('Page not found!');
 });
-//error handeling
+
+
 app.use((err, req, res, next) => {
-  let { statusCode = 500, message = "Something went wrong" } = err;
-  res.status(statusCode).render("error.ejs", { message });
-  //res.status(statusCode).send(message);
+  const { statusCode = 500 } = err;
+  if (!err.message) err.message = "Oh No, Something Went Wrong!";
+  res.status(statusCode).render("error", { message: err.message }); // Ensure `message` is passed
 });
 
 app.listen(8080, () => {
