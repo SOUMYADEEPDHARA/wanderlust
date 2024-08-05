@@ -15,6 +15,7 @@ const { listingSchema } = require("./schema.js");
 const Review = require("./models/review.js");
 const { reviewSchema } = require("./schema.js");
 const session = require("express-session");
+const MongoStore = require('connect-mongo');
 const flash = require("connect-flash");
 const passport=require("passport");
 const LocalStrategy= require("passport-local")
@@ -37,6 +38,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+const db_URL=process.env.Atlust_DB_URL;
+
 main().then(() => {
   console.log('Connected to MongoDB');
 })
@@ -45,15 +48,29 @@ main().then(() => {
   });
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust');
+  await mongoose.connect(db_URL);
 
 }
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 
+const store=MongoStore.create({
+  mongoUrl:db_URL,
+  crypto:{
+    secret:process.env.SECRET,
+  },
+  touchAfter: 24 * 60 * 60, // 1 day
+
+});
+
+store.on("error",()=>{
+  console.log("Error in session store",err);
+});
+
 const sessionOptions={
-  secret: 'Mysecretcpde',
+  store,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie:{
@@ -65,9 +82,9 @@ const sessionOptions={
 }
 
 
-app.get("/", (req, res) => {
-  res.send("hi i am rout");
-});
+// app.get("/", (req, res) => {
+//   res.send("hi i am rout");
+// });
 
 
 
@@ -90,14 +107,6 @@ app.use((req,res,next) =>{
   next();
 });
 
-/*app.get("/demouser",async(req,res)=>{
-  let fakeUser= new User({
-      email:"student@gmail.com",
-      username:"student",
-  });
- let registeredUser= await User.register(fakeUser,"hello");
- res.send(registeredUser);
-});*/
 
 app.use("/listings",listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);

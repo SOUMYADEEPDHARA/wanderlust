@@ -1,5 +1,8 @@
 <% layout("/layouts/boilerplate") %>
-
+<script>
+   const Map_Token="<%=process.env.MAP_TOKEN%>";
+   const coordinates=<%-JSON.stringify(listing.geometry.coordinates) %>;
+</script>
 <body>
   <main class="d-flex flex-column justify-content-center min-vh-100">
     <h3 class="my-4"><%= listing.title %></h3>
@@ -87,8 +90,11 @@
           </div>
         <% } %>
       </div>
+      <div class=" mb-4">
+        <h6>Where you will be</h6>
+        <div id="map"></div>
+      </div>
     </div>
-    
   </main>
 
   <!-- Modal for full-screen image -->
@@ -105,4 +111,5 @@
       </div>
     </div>
   </div>
+  <script src="/js/map.js"></script>
 </body>
