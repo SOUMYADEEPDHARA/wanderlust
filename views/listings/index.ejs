@@ -64,25 +64,24 @@
     </div>
   </div>
 
-
   <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
     <% for(let listing of allListings) { %>
+      <% 
+        // Calculate the price after adding 18% GST
+        let priceWithGST = listing.price * 1.18;
+      %>
       <a href="/listings/<%= listing._id %>" class="listing-link">
         <div class="card col">
           <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height:20rem">
-          <div class="card-img-overlay">abcd</div>
+          <div class="card-img-overlay">Please click on the image</div>
           <div class="card-body">
             <p class="card-text">
-              <b>
-                <%= listing.title %>
-              </b> <br />
-              <%= listing.price.toLocaleString("en-IN") %>/night
-              <i class="tax-info">&nbsp; &nbsp;+18% GST</i>
+              <b><%= listing.title %></b> <br />
+              <%= listing.price.toLocaleString("en-IN") %>/night + 18% GST%> <br>
+              <i class="tax-info">After GST: <%= priceWithGST.toLocaleString("en-IN") %>/night</i><br />
             </p>
           </div>
         </div>
       </a>
-      <% } %>
+    <% } %>
   </div>
-
- 
